@@ -1,0 +1,3 @@
+display_name: API Abuse & Quota Audit
+short_description: Find API abuse, quota, and key risks.
+default_prompt: Audit this project for API abuse, quota exhaustion, rate-limit failures, credential exposure, wasteful API calls, and billing or reliability risks.
