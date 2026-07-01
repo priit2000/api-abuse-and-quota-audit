@@ -14,14 +14,15 @@ Use this skill to prevent API integrations from becoming abuse, quota, reliabili
 1. Inventory every API integration in the application.
 2. Classify each integration as browser/client, mobile, server, background job, webhook, internal service, or third-party automation.
 3. Identify credentials and access mechanisms: API keys, OAuth tokens, service accounts, webhook secrets, signed URLs, temporary tokens, or provider-managed identities.
-4. Separate evidence into:
+4. If a repository is available, optionally run `scripts/find-api-risk-patterns.py <repo-path>` to build a first-pass map of likely providers, request code, retry/polling patterns, and possible credential exposure. Treat script output as leads, not proof.
+5. Separate evidence into:
    - `Confirmed from repo`
    - `Confirmed from provider config`
    - `Needs verification`
-5. Inspect application code for wasteful, repeated, or abusable API calls.
-6. Inspect infrastructure-as-code, deployment config, environment definitions, and provider settings when available.
-7. Detect available provider CLIs or APIs before claiming provider-side settings.
-8. Produce prioritized findings with exact fixes and manual verification steps for anything not directly observable.
+6. Inspect application code for wasteful, repeated, or abusable API calls.
+7. Inspect infrastructure-as-code, deployment config, environment definitions, and provider settings when available.
+8. Detect available provider CLIs or APIs before claiming provider-side settings.
+9. Produce prioritized findings with exact fixes and manual verification steps for anything not directly observable.
 
 ## Evidence Rules
 
@@ -34,6 +35,8 @@ Use `Confirmed from provider config` only when actual provider settings are visi
 Use `Needs verification` for quotas, budget alerts, enabled APIs, key restrictions, WAF/rate-limit rules, billing thresholds, and similar settings when the source of truth is unavailable.
 
 Read `references/evidence-sources.md` when provider settings, account configuration, IaC, or evidence quality matters.
+
+If the user asks for an audit, report, shareable result, or review summary, follow `references/audit-output-template.md`.
 
 ## What To Check
 
@@ -117,3 +120,14 @@ Severity guidance:
 - `High`: easy bot abuse path, missing quota or rate limit on public paths, expensive calls before user intent, missing key restrictions, or broad production permissions.
 - `Medium`: duplicate calls, weak caching, unsafe retries, broad scopes, weak `429` handling, or shared quota between environments.
 - `Low`: monitoring gaps, stale keys, documentation gaps, ownership ambiguity, or non-urgent cleanup.
+
+## Plain-Language Mode
+
+When the user is not deeply technical, explain key terms briefly:
+
+- API key: a password-like code that lets an app use another service.
+- Quota: the amount of usage allowed before the service slows, blocks, or charges more.
+- Rate limit: a speed limit for how many requests can happen in a short time.
+- Browser key: a key that may be visible to website visitors and therefore needs strict restrictions.
+- Server key: a private key that should stay on backend servers and never ship to browsers or mobile apps unless designed for that.
+- Bot protection: controls that stop automated traffic from using forms or endpoints at scale.

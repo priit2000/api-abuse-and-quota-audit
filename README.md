@@ -22,6 +22,15 @@ Source discussion: [Vibecoding Life Facebook post](https://www.facebook.com/grou
 - Retry loops, polling, duplicate requests, or missing caching.
 - Places where actual provider settings need to be checked manually.
 
+## Simple Terms
+
+- **API key**: a password-like code that lets your app use another service.
+- **Quota**: the amount of usage you are allowed before a service slows down, blocks requests, or starts costing more.
+- **Rate limit**: a speed limit for requests.
+- **Browser key**: a key that may be visible to website visitors, so it needs strict restrictions.
+- **Server key**: a private key that should stay on your backend and not appear in website code.
+- **Bot protection**: checks that stop automated traffic from using your forms or API endpoints too much.
+
 ## When To Use It
 
 Use this skill when you want Codex to review a project before launch, after a quota or billing issue, or after adding a feature that calls external services.
@@ -60,26 +69,60 @@ The skill is provider-neutral. It can be used for services such as:
 
 ## How To Install
 
-Copy or link this folder into your Codex skills directory:
+Install it from GitHub the same way you would install any other public Codex skill:
 
 ```bash
-~/.codex/skills/api-abuse-and-quota-audit
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo priit2000/api-abuse-and-quota-audit \
+  --path . \
+  --name api-abuse-and-quota-audit
 ```
 
-After that, ask Codex to use the skill by name:
+Restart Codex after installing so it can pick up the new skill. Then ask Codex to use it by name:
 
 ```text
 Use api-abuse-and-quota-audit to review this project.
+```
+
+## Example Result
+
+A typical audit might say:
+
+```text
+Overall risk: High
+
+APIs found:
+- Google Places in the website search box
+- SendGrid in the contact form
+- OpenAI in the summary endpoint
+
+Critical findings:
+- None confirmed.
+
+High findings:
+- The contact form can trigger SendGrid without a visible rate limit. Confirmed from repo.
+- Google Places details lookups appear to happen before final user selection. Confirmed from repo.
+
+Needs verification:
+- Check whether the Google browser key is restricted to production and staging domains.
+- Check whether daily quotas and billing alerts are set for Google Places and OpenAI.
+
+Quick wins:
+- Add debounce and a minimum input length to autocomplete.
+- Add per-IP and per-user rate limits to public endpoints.
+- Split browser and server API keys if they are currently shared.
 ```
 
 ## Files
 
 - `SKILL.md`: the main skill instructions.
 - `references/evidence-sources.md`: how to tell what is confirmed and what still needs checking.
+- `references/audit-output-template.md`: a reusable structure for audit reports.
 - `references/provider-checklists.md`: provider-specific things to inspect.
 - `references/frontend-patterns.md`: browser and frontend patterns that cause extra API calls.
 - `references/server-patterns.md`: server, worker, webhook, retry, caching, and rate-limit checks.
 - `references/incident-response.md`: what to do after a leaked key, quota spike, billing issue, or provider throttling incident.
+- `scripts/find-api-risk-patterns.py`: a lightweight first-pass scanner for likely API risk patterns.
 
 ## Important Limit
 
