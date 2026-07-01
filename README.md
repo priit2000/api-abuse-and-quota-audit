@@ -4,6 +4,12 @@ This is a Codex skill for checking whether an app could run into API problems.
 
 It is not only for paid APIs. It also covers free-tier APIs, shared quotas, rate limits, account suspensions, service slowdowns, and surprise bills.
 
+## Origin
+
+This skill is based on a real experience discussed in the Vibecoding Life Facebook group: an API setup that could have been safer with stricter key restrictions, separated browser and server credentials, quotas, budget alerts, bot protection, and fewer unnecessary API lookups.
+
+Source discussion: [Vibecoding Life Facebook post](https://www.facebook.com/groups/vibecodinglife/posts/2072351953353331/?comment_id=2072381400017053&notif_id=1782909614532091&notif_t=feedback_reaction_generic&ref=notif)
+
 ## What It Helps Find
 
 - API keys that are too exposed or too powerful.
